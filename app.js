@@ -26,7 +26,8 @@ app.use(express.json())
     app.use(express.static(path.join(__dirname,"public")))
 
 //Rotas
-    app.use('/admin', admin)
+    app.use('/admin', admin);  // O "/admin" vai ser um subcaminho(prefixo)
+
 //Pra chamar as rotas
 
 
