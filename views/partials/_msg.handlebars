@@ -1,0 +1,11 @@
+{{!-- Isso é chamado no main - body --}}
+{{!-- Se exitir uma mesagem de sucesso faça... --}}
+{{!-- success_msg e error_msg são as variáveis globais --}}
+
+{{#if success_msg}}
+    <div class="alert alert-success">{{success_msg}}</div>
+{{/if}}
+
+{{#if error_msg}}
+    <div class= "alert alert-danger">{{error_msg}}</div>
+{{/if}}

@@ -11,9 +11,22 @@ router.get('/', (req,res)=>{
 router.get('/posts',(req,res)=>{
     res.send("Página dos posts");
 })
-
+// Onde serão mostradas as categorias
 router.get('/categorias',(req,res)=>{
-    res.render("admin/categorias");
+
+    //antes de renderizar 
+    //A função find() que lista todos documentos que existem, todas as categorias
+    //todo model tem essa função
+//sort para mostrar em ordem decrescente conforme a data da criação
+    Categoria.find().sort({date:'desc'}).then((categorias)=>{
+        //passar as categorias para a página
+        // res.render("admin/categorias",{categorias:categorias}) //tava assim anttes
+        res.render('admin/categorias', {categorias: categorias.map(categoria => categoria.toJSON())})    
+    }).catch((err)=>{
+        req.flash("error_msg", "Houve um erro ao listar as categorias");
+        res.redirect("/admin");
+    })
+  //  res.render("admin/categorias");
 })
 
 router.get('/categorias/add',(req,res)=>{
@@ -21,8 +34,8 @@ router.get('/categorias/add',(req,res)=>{
 })
 
 router.post("/categorias/nova",(req,res)=>{
-
-    var erros=[]
+    // fazendo validação do formulário
+    var erros=[];
 
     if(!req.body.nome || typeof req.body.slug == undefined || req.body.nome == null){
          erros.push({texto:"Nome inválido."}) 
@@ -39,19 +52,26 @@ router.post("/categorias/nova",(req,res)=>{
     if(erros.length>0){
         res.render("admin/addcategorias",{erros : erros})
     }else{
-        const novaCategoria = {
-        
+        const novaCategoria = { 
         nome: req.body.nome,
         slug: req.body.slug
 }
+    //Salvar nova categoria no banco de dados
         new Categoria(novaCategoria).save().then(()=>{
             console.log("Categoria salva com sucesso");
+            //Mensagem de sucesso
+            req.flash("success_msg","Categoria criada com sucesso")
+            res.redirect("/admin/categorias")
         }).catch((err) =>{
-            console.log("Erro ao salvar categoria");
+            //Mensagem de erro
+            req.flash("error_msg","Houve um erro ao salvar a categoria, tente novamente")
+            res.redirect("/admin");
         })
     }
 
-    
+ router.get("/categorias/edit/:id"), (req,res)=>{
+     res.render("../admin/editcategorias")
+ }   
 })
 
 

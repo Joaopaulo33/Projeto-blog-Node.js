@@ -7,6 +7,7 @@ const admin = require("./routes/admin");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser')
 const session = require('express-session');
+//Para que as mensagens sumam quando carregar a página
 const flash = require("connect-flash")
 
 //Configurações
@@ -21,8 +22,9 @@ const flash = require("connect-flash")
 
     //Middleware
         app.use((req, res, next)=>{
-            res.locals.success_msg = req.flash('success_msg')
-            res.locals.error_msg = req.flash('error_msg')
+            // criando variáveis locais 
+            res.locals.success_msg = req.flash('success_msg');
+            res.locals.error_msg = req.flash('error_msg');
             next();
         })
 
@@ -34,17 +36,18 @@ app.engine("handlebars", hbs.engine);
 app.set("view engine", 'handlebars');
 
 //bodyparse(no lugar dele)     
-    app.use(bodyParser.urlencoded({extended: false}))
-    app.use(bodyParser.json())  
+    app.use(bodyParser.urlencoded({extended: false}));
+    app.use(bodyParser.json());
 // app.use(express.urlencoded({extended:false}));
 // app.use(express.json());
 
 
 //Mongoose
-    //em breve
+
     mongoose.Promise = global.Promise;
     mongoose.connect("mongodb://127.0.0.1/blogapp",{
-       // useMongoClient: true //disse que não é suportado
+        //disse que não é suportado
+        // useMongoClient: true 
     }).then(()=>{
         console.log("Conectado ao mongo");
     }).catch((err) =>{

@@ -15,5 +15,6 @@ const Categoria = new Schema({
         default: Date.now()
     }
 })
-
+// categorias é a collection
+//Categoria é o model
 mongoose.model("categorias", Categoria);

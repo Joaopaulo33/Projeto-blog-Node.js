@@ -4,6 +4,7 @@
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
     "express-session": "^1.17.2",
+    "handlebars": "^4.5.3",
     "mongoose": "^6.1.6",
     "mongose": "^0.0.2-security"
   }
