@@ -69,11 +69,17 @@ router.post("/categorias/nova",(req,res)=>{
         })
     }
 
- router.get("/categorias/edit/:id"), (req,res)=>{
-     res.render("../admin/editcategorias")
- }   
+ 
 })
 
+//  router.get('/categorias/edit/:id'), (req,res)=>{
+//     res.render('ola') 
+//     //res.render("/categorias/edit/:id")
+//  }  
+
+ router.get('/categorias/edit/:id', (req,res)=>{
+    res.render("admin/editcategorias");
+})
 
 
 module.exports = router;
