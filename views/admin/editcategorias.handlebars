@@ -4,17 +4,18 @@
 {{else}}
 {{/each}}
 
-<h1>{{_id}}</h1>
+
 <h3>Editar categoria</h3>
 <div class = "card">
     <div class ="card-body">
         {{!-- Para onde irão as informaçoes --}}
-        <form action="/admin/categorias/nova" method="POST">
-        
+        <form action="/admin/categorias/edit" method="POST">
+        <input type="hidden" name="id" value="{{categoria._id}}">
         <label for="nome">Nome: </label>
-            <input type="text" id="nome" name="nome" placeholder="Nome da categoria" class="form-control">
+            <input type="text" id="nome" name="nome" placeholder="Nome da categoria" class="form-control" value="{{categoria.nome}}">
         <label for="slug">Slug: </label>
-            <input type="text" id="slug" name="slug" placeholder="Slug da categoria" class="form-control">
+            <input type="text" id="slug" name="slug" placeholder="Slug da categoria" class="form-control"
+            value="{{categoria.slug}}">
         <button type="submit" class= "btn btn-success" style="margin-top: 10px;">Editar categoria</button>
         </form>
     </div>
