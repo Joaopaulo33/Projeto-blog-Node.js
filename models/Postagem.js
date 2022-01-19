@@ -24,7 +24,10 @@ const Postagem = new Schema({
         type: Schema.Types.ObjectId,
         ref: "categorias",
        // required: true    
-    }
+    },
+    conteudo:{
+        type: String
+    }   
 })
 // categorias é a collection
 //Categoria é o model
