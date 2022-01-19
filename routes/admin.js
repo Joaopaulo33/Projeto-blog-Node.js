@@ -10,7 +10,6 @@ const Postagem = mongoose.model("postagens")
 router.get('/', (req,res)=>{
    res.render("admin/index");
 })
-
 router.get('/posts',(req,res)=>{
     res.send("Página dos posts");
 })
@@ -156,9 +155,9 @@ router.get("/postagens",(req,res)=>{
 })
 
 router.get("/postagens/add",(req,res)=>{
-    Categoria.find().lean().then((categorias)=>{
+    Categoria.find().lean().then((categoria)=>{
 
-            res.render("admin/addpostagem",{categorias:categorias})
+            res.render("admin/addpostagem",{categoria:categoria})
 
     }).catch(()=>{req.flash("error_msg", "Houve um erro ao carregar o formulário")
     res.rediect("/admin")
@@ -180,22 +179,32 @@ router.post("/postagens/nova",(req,res)=>{
             titulo: req.body.titulo,
             descricao: req.body.descricao,
             conteudo: req.body.conteudo,
+            categoria: req.body.categoria,
             slug:req.body.slug
         }
-        
-        new Postagem(novaPostagem).save().then(()=>{
+        // new Postagem(novaPostagem).save().lean().then(()=>{
+        //     req.flash("success_msg","Postagem criada com sucesso!")
             
-            console.log("eu")
-            req.flash("success_msg","Postagem criada com sucesso!")
-            redirect("/admin/postagens")
-        }).catch((err)=>{
-            console.log(err)
-            req.flash("error_msg","Houve um erro durante o salvamento da postagem")
+        //     redirect("/admin/postagens")
+        // }).catch((err)=>{
+        //     console.log(err)
+        //     req.flash("error_msg","Houve um erro durante o salvamento da postagem")
+        //     res.redirect("/admin/postagens")
+        // })
+        new Postagem(novaPostagem).save().then(()=>{
+            console.log("Postagem salva com sucesso");
+            //Mensagem de sucesso
+            req.flash("success_msg","Categoria criada com sucesso")
+            res.redirect("/admin/postagens")
+        }).catch((err) =>{
+            //Mensagem de erro
+            req.flash("error_msg","Houve um erro ao salvar a categoria, tente novamente")
             res.redirect("/admin/postagens")
         })
-    }
-// })
-)
+    
+  //  }
+ })
+
 
 
 module.exports = router;
