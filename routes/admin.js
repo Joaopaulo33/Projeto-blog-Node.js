@@ -156,6 +156,7 @@ router.get("/postagens",(req,res)=>{
         //passar as categorias para a página
         // res.render("admin/categorias",{categorias:categorias}) //tava assim anttes
         res.render('admin/postagens', {postagens: postagens.map(postagem => postagem.toJSON())})    
+        
     }).catch((err)=>{
         req.flash("error_msg", "Houve um erro ao listar as postagens");
         console.log(err)
@@ -262,6 +263,7 @@ router.post("/postagens/edit", (req, res)=>{
         res.redirect("/admin/postagens")
     })
 })
+
 
 router.get("/postagens/deletar/:id", (req,res)=>{
     Postagem.remove({_id: req.params.id}).then(()=>{
