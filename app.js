@@ -4,6 +4,7 @@ const handlebars = require('express-handlebars');
 const app = express();
 const path = require("path");
 const admin = require("./routes/admin");
+const usuarios = require("./routes/usuario")
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser')
 const session = require('express-session');
@@ -18,6 +19,8 @@ require("./models/Postagem")
 const Postagem = mongoose.model("postagens")
 require("./models/Categoria")
 const Categoria = mongoose.model("categorias")
+require("./models/Usuario")
+const Usuario = mongoose.model("usuarios")
 
 //Configurações
 
@@ -70,7 +73,6 @@ mongoose.connect("mongodb://127.0.0.1/blogapp", {
 app.use(express.static(path.join(__dirname, "public")));
 
 //Rotas
-app.use('/admin', admin); // O "/admin" vai ser um subcaminho(prefixo)
 
 app.get("/", (req, res) => {
     Postagem.find().populate("categoria").sort({
@@ -104,14 +106,10 @@ app.get("/postagem/:slug", (req, res) => {
     })
 })
 
-app.get("/404", (req, res) => {
-    res.send('ERRO 404!')
-})
-
 
 app.get("/categorias", (req, res) => {
     Categoria.find().lean().then((categorias) => {
-
+        
         res.render("categorias/index", {
             categorias: categorias
         })
@@ -149,8 +147,14 @@ app.get("/categorias/:slug", (req, res) => {
     })
 })
 
+app.get("/404", (req, res) => {
+    res.send('ERRO 404!')
+})
 
-//Pra chamar as rotas
+
+//Pra chamar Grupo de rotas
+app.use('/admin', admin); 
+app.use('/usuarios', usuarios)
 
 //Outros
 const PORT = 8081;

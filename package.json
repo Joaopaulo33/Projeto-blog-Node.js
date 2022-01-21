@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
