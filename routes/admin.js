@@ -6,15 +6,17 @@ require("../models/Categoria");
 const Categoria = mongoose.model("categorias");
 require("../models/Postagem");
 const Postagem = mongoose.model("postagens")
+//de dentro do objeto eAdmin, quero apenas a função eAdmin
+const {eAdmin} = require("../helpers/eAdmin")
 
-router.get('/', (req,res)=>{
+router.get('/', eAdmin, (req,res)=>{
    res.render("admin/index");
 })
-router.get('/posts',(req,res)=>{
+router.get('/posts',eAdmin,(req,res)=>{
     res.send("Página dos posts");
 })
 // Onde serão mostradas as categorias
-router.get('/categorias',(req,res)=>{
+router.get('/categorias',eAdmin,(req,res)=>{
 
     //antes de renderizar 
     //A função find() que lista todos documentos que existem, todas as categorias
@@ -31,11 +33,11 @@ router.get('/categorias',(req,res)=>{
   //  res.render("admin/categorias");
 })
 
-router.get('/categorias/add',(req,res)=>{
+router.get('/categorias/add',eAdmin,(req,res)=>{
     res.render("admin/addcategorias");
 })
 
-router.post("/categorias/nova",(req,res)=>{
+router.post("/categorias/nova",eAdmin,(req,res)=>{
     // fazendo validação do formulário
     var erros=[];
 
@@ -77,7 +79,7 @@ router.post("/categorias/nova",(req,res)=>{
 
 // Essa rota passa informações para a view editcategorias(categoria)
 // Identifica qual é a categoria atravéz do id
- router.get('/categorias/edit/:id', (req,res) => {
+ router.get('/categorias/edit/:id',eAdmin, (req,res) => {
      //FindOne procurar um unico id
      // o Lean "simplifica" a constante e permite que seja usada de maneira normal.
     //Procura categoria que possui o id igual ao que foi passado pela view categorias "{{id}}"
@@ -92,7 +94,7 @@ router.post("/categorias/nova",(req,res)=>{
 
 // Onde a edição será efetivada
 //Essa rota apenas executa a edição 
-router.post("/categorias/edit", (req, res) => {
+router.post("/categorias/edit", eAdmin,(req, res) => {
     Categoria.findOne({ _id: req.body.id }).then((categoria) => {
         let erros = []
 
@@ -139,7 +141,7 @@ router.post("/categorias/edit", (req, res) => {
 })
 
 
-router.post("/categorias/deletar", (req,res)=>{
+router.post("/categorias/deletar", eAdmin,(req,res)=>{
     Categoria.remove({_id: req.body.id}).then(()=>{
         req.flash("success_msg","Categoria deletada com sucesso!")
         res.redirect("/admin/categorias")
@@ -149,7 +151,7 @@ router.post("/categorias/deletar", (req,res)=>{
     })
 })
 
-router.get("/postagens",(req,res)=>{
+router.get("/postagens",eAdmin,(req,res)=>{
     //O  populate consegue pegar atributos de outros models como "CATEGORIA"
     //No populate é o nome que demos no model "categoria no caso"
     Postagem.find().populate("categoria").sort({date:'desc'}).then((postagens)=>{
@@ -164,7 +166,7 @@ router.get("/postagens",(req,res)=>{
     })
 })
 
-router.get("/postagens/add",(req,res)=>{
+router.get("/postagens/add",eAdmin,(req,res)=>{
     Categoria.find().lean().then((categoria)=>{
 
             res.render("admin/addpostagem",{categoria:categoria})
@@ -174,7 +176,7 @@ router.get("/postagens/add",(req,res)=>{
     })
 })
 
-router.post("/postagens/nova",(req,res)=>{
+router.post("/postagens/nova",eAdmin,(req,res)=>{
 
 
      var erros =[];
@@ -221,7 +223,7 @@ router.post("/postagens/nova",(req,res)=>{
  })
 
 //O id está passando como parâmetro, por isso o params
-router.get("/postagens/edit/:id", (req,res)=>{
+router.get("/postagens/edit/:id", eAdmin,(req,res)=>{
     
     Postagem.findOne({_id: req.params.id}).lean().then((postagem)=>{
         Categoria.find().lean().then((categoria)=>{
@@ -240,7 +242,7 @@ router.get("/postagens/edit/:id", (req,res)=>{
     })
 })
 
-router.post("/postagens/edit", (req, res)=>{
+router.post("/postagens/edit",eAdmin, (req, res)=>{
 
     Postagem.findOne({_id: req.body.id}).then((postagem)=>{
         postagem.titulo= req.body.titulo;
@@ -265,7 +267,7 @@ router.post("/postagens/edit", (req, res)=>{
 })
 
 
-router.get("/postagens/deletar/:id", (req,res)=>{
+router.get("/postagens/deletar/:id",eAdmin, (req,res)=>{
     Postagem.remove({_id: req.params.id}).then(()=>{
         req.flash("success_msg","Postagem deletada com sucesso!")
         res.redirect("/admin/postagens")

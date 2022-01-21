@@ -4,6 +4,9 @@ const mongoose = require('mongoose')
 require("../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 const bcrypt = require("bcryptjs")
+const passport = require("passport");
+const eAdmin = require("../helpers/eAdmin");
+const { redirect } = require("express/lib/response");
 
 //Rotas
 router.get("/registro", (req, res) => {
@@ -45,7 +48,8 @@ router.post("/registro",(req,res)=>{
               const novoUsuario = new Usuario({
                 nome: req.body.nome,
                 email: req.body.email,
-                senha: req.body.senha
+                senha: req.body.senha,
+              //  eAdmin: 1     
                 })
 
 
@@ -76,4 +80,24 @@ router.post("/registro",(req,res)=>{
 
     }
 })
+
+router.get("/login", (req,res)=>{
+    res.render("usuarios/login")
+})
+
+router.post("/login",(req,res,next)=>{
+    passport.authenticate("local",{
+        successRedirect: "/",
+        failureRedirect:"/usuarios/login",
+        //habilitandoa as mensagens flash
+        failureFlash: true
+    })(req,res,next)
+})
+
+router.get("/logout", (req,res)=>{
+    req.logout()
+    req.flash('success_msg','Deslogado com sucesso')
+    res.redirect("/");
+})
+
 module.exports = router;

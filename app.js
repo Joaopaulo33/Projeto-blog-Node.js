@@ -8,7 +8,6 @@ const usuarios = require("./routes/usuario")
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser')
 const session = require('express-session');
-//Para que as mensagens sumam quando carregar a página
 const flash = require("connect-flash");
 const req = require('express/lib/request');
 const res = require('express/lib/response');
@@ -20,25 +19,31 @@ const Postagem = mongoose.model("postagens")
 require("./models/Categoria")
 const Categoria = mongoose.model("categorias")
 require("./models/Usuario")
+const passport = require('passport');
 const Usuario = mongoose.model("usuarios")
+require("./config/auth")(passport)
 
 //Configurações
 
 //Sessions
+
 app.use(session({
     secret: "cursodenode",
     resave: true,
     saveUninitialized: true
 }))
-
-app.use(flash())
+    app.use(passport.initialize())
+    app.use(passport.session())
+    app.use(flash())
 
 //Middleware
 app.use((req, res, next) => {
     // criando variáveis locais 
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash("error")
     next();
+    res.locals.user = req.user || null;
 })
 
 //handlebars
@@ -157,7 +162,7 @@ app.use('/admin', admin);
 app.use('/usuarios', usuarios)
 
 //Outros
-const PORT = 8081;
+const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
     console.log("Servidor rodando! ")
 })
