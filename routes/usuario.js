@@ -82,10 +82,12 @@ router.post("/registro",(req,res)=>{
 })
 
 router.get("/login", (req,res)=>{
+    console.log("ola");
     res.render("usuarios/login")
 })
 
 router.post("/login",(req,res,next)=>{
+    
     passport.authenticate("local",{
         successRedirect: "/",
         failureRedirect:"/usuarios/login",

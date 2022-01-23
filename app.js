@@ -163,6 +163,6 @@ app.use('/usuarios', usuarios)
 
 //Outros
 const PORT = process.env.PORT || 8081;
-app.listen(PORT, () => {
+app.gitisten(PORT, () => {
     console.log("Servidor rodando! ")
 })
